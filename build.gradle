@@ -4,6 +4,7 @@ plugins {
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.jooq.jooq-codegen-gradle' version '3.19.23'
+	id 'org.flywaydb.flyway' version '9.22.0'
 }
 
 group = 'com.book'
@@ -28,15 +29,14 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jooq'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -53,7 +53,14 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+flyway {
+	url = 'jdbc:postgresql://localhost:5432/book_management'
+	user = 'book'
+	password = 'management'
+}
+
 jooq {
+	version = '3.19.23'
 	configuration {
 		jdbc {
 			driver = "org.postgresql.Driver"
@@ -62,9 +69,21 @@ jooq {
 			password = "management"
 		}
 		generator {
+			name = "org.jooq.codegen.KotlinGenerator"
 			database {
 				name = "org.jooq.meta.postgres.PostgresDatabase"
-				inputSchema = "book_management_schema"
+				inputSchema = "public"
+			}
+			generate {
+				daos = true
+				records = true
+				fluentSetters = true
+				javaTimeTypes = true
+				deprecated = false
+			}
+			target {
+				packageName = "com.book.management.generated"
+				directory = "build/generated-src/jooq"
 			}
 		}
 	}
@@ -73,7 +92,7 @@ jooq {
 sourceSets {
 	main {
 		java {
-			srcDirs += 'src/main/generated'
+			srcDir 'build/generated-src/jooq'
 		}
 	}
 }
