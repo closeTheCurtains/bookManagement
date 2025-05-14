@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: management
+  datasource:
+    url: jdbc:postgresql://postgres:5432/book_management
+    username: user
+    password: pass
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
