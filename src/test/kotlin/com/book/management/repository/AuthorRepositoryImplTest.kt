@@ -8,9 +8,11 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @SpringBootTest
+@Transactional
 class AuthorRepositoryImplTest {
 
     @Autowired
@@ -18,7 +20,7 @@ class AuthorRepositoryImplTest {
 
     @DisplayName("著者登録 成功")
     @Test
-    fun register() {
+    fun `register success`() {
         // given
         val author = Author(
             firstName = "firstName",
@@ -62,16 +64,16 @@ class AuthorRepositoryImplTest {
     @Test
     fun `update fail`() {
         // given
-        val updatedAuthor = Author(
+        val updateAuthor = Author(
             id = 999999L,
             firstName = "firstName_updated",
             lastName = "lastName_updated",
             birthDate = LocalDate.of(1990, 12, 31),
         )
 
-        // when & than
+        // when & then
         assertThatThrownBy {
-            authorRepository.update(updatedAuthor)
+            authorRepository.update(updateAuthor)
         }.isInstanceOf(NoDataFoundException::class.java)
             .hasMessage("該当著者は未登録です。 id: 999999")
 
@@ -98,7 +100,7 @@ class AuthorRepositoryImplTest {
         // when
         val result = authorRepository.existsAuthorByIds(authorIds)
 
-        // than
+        // then
         assertThat(result).isTrue()
     }
 
@@ -125,7 +127,7 @@ class AuthorRepositoryImplTest {
         // when
         val result = authorRepository.existsAuthorByIds(authorIds)
 
-        // than
+        // then
         assertThat(result).isFalse()
     }
 }
