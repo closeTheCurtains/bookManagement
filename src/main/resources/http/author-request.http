@@ -1,0 +1,47 @@
+### 著者登録 成功
+POST localhost:8080/authors
+Content-Type: application/json
+
+{
+    "firstName": "SANGJIN",
+    "lastName": "KIM",
+    "birthDate": "1993-10-13"
+}
+
+### 著者登録(生年月日が未来日付) 失敗
+POST localhost:8080/authors
+Content-Type: application/json
+
+{
+  "firstName": "SANGJIN",
+  "lastName": "KIM",
+  "birthDate": "2099-12-31"
+}
+
+### 著者更新 成功
+PUT localhost:8080/authors
+Content-Type: application/json
+
+{
+  "id": 1,
+  "firstName": "SANGJIN_update",
+  "lastName": "KIM_update",
+  "birthDate": "2025-01-05"
+}
+
+### 著者更新(生年月日が未来日付) 失敗
+PUT localhost:8080/authors
+Content-Type: application/json
+
+{
+  "id": 1,
+  "firstName": "SANGJIN_update",
+  "lastName": "KIM_update",
+  "birthDate": "2099-12-31"
+}
+
+### 著者の書籍取得 成功
+GET localhost:8080/authors/1/books
+
+### 著者の書籍取得(未登録著者) 失敗
+GET localhost:8080/authors/999/books

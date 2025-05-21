@@ -1,0 +1,114 @@
+### 書籍登録(著者１名) 成功
+POST localhost:8080/books
+Content-Type: application/json
+
+{
+  "title": "title",
+  "price": 500,
+  "publishStatus": false,
+  "authorIds": [1]
+}
+
+### 書籍登録(著者２名) 成功
+POST localhost:8080/books
+Content-Type: application/json
+
+{
+  "title": "title",
+  "price": 500,
+  "publishStatus": false,
+  "authorIds": [1, 2]
+}
+
+### 書籍登録(価格がマイナス) 失敗
+POST localhost:8080/books
+Content-Type: application/json
+
+{
+  "title": "title",
+  "price": -100,
+  "publishStatus": false,
+  "authorIds": [1]
+}
+
+### 書籍登録(著者なし) 失敗
+POST localhost:8080/books
+Content-Type: application/json
+
+{
+  "title": "title",
+  "price": 500,
+  "publishStatus": false,
+  "authorIds": []
+}
+
+### 書籍登録(未登録著者) 失敗
+POST localhost:8080/books
+Content-Type: application/json
+
+{
+  "title": "title",
+  "price": 500,
+  "publishStatus": false,
+  "authorIds": [999]
+}
+
+### 書籍更新(出版状況:未出版 → 出版済み) 成功
+PUT localhost:8080/books
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "title_update",
+  "price": 700,
+  "publishStatus": true,
+  "authorIds": [1]
+}
+
+### 書籍更新(出版状況:出版済み → 未出版) 失敗
+PUT localhost:8080/books
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "title_update",
+  "price": 700,
+  "publishStatus": false,
+  "authorIds": [1]
+}
+
+### 書籍更新(著者１名 → ２名) 成功
+PUT localhost:8080/books
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "title_update",
+  "price": 700,
+  "publishStatus": true,
+  "authorIds": [1, 2]
+}
+
+### 書籍更新(著者２名 → １名) 成功
+PUT localhost:8080/books
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "title_update",
+  "price": 700,
+  "publishStatus": true,
+  "authorIds": [1]
+}
+
+### 書籍更新(著者１名 → ０名) 失敗
+PUT localhost:8080/books
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "title_update",
+  "price": 700,
+  "publishStatus": true,
+  "authorIds": []
+}
